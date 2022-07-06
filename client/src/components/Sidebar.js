@@ -13,7 +13,7 @@ const Sidebar = () => {
   return (
     <div>
       <div className="min-h-screen bg-black">
-        <div className="sidebar min-h-screen w-[3.35rem] overflow-hidden border-r hover:w-60 hover:bg-white hover:shadow-lg">
+        <div className="sidebar min-h-screen w-[3.35rem] overflow-hidden border-r hover:w-64 hover:bg-white hover:shadow-lg">
           <div className="flex h-screen flex-col justify-between pt-2 pb-6">
             <div>
               <div className="w-max p-2.5">
@@ -44,7 +44,7 @@ const Sidebar = () => {
                 </li>
                 <li className="min-w-max">
                   <Link
-                    to="/new+employee"
+                    to="/newemployee"
                     className="bg group flex items-center space-x-4 rounded-full px-4 py-3 text-gray-700"
                   >
                     <img src={newEmployee} alt="Logo" width="25" height="25" />

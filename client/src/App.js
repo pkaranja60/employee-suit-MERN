@@ -17,7 +17,7 @@ function App() {
         {/* Protected Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/employee+records" element={<EmployeeList />} />
-        <Route path="/new+employee" element={<NewEmployee />} />
+        <Route path="/newemployee" element={<NewEmployee />} />
         <Route path="/leave+list" element={<LeaveList />} />
         <Route path="/leave/:id" element={<LeaveScreen />} />
         <Route path="/profile" element={<Profile />} />
