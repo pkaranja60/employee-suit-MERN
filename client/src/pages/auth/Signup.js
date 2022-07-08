@@ -26,7 +26,7 @@ const Signup = () => {
 
   useEffect(() => {
     if (isSuccess || user) {
-      navigate("/");
+      navigate("/login");
     }
 
     dispatch(reset());
