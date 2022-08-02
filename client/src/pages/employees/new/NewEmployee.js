@@ -10,8 +10,8 @@ import Loader from "../../../components/Loader";
 const NewEmployee = () => {
   const dispatch = useDispatch();
 
-  const [selectedOptions, setSelectedOptions] = useState("");
   const [fullName, setFullName] = useState("");
+  const [gender, setGender] = useState("");
   const [workId, setWorkId] = useState("");
   const [department, setDepartment] = useState("");
   const [email, setEmail] = useState("");
@@ -19,8 +19,6 @@ const NewEmployee = () => {
   const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [county, setCounty] = useState("");
-
-  const [gender, setGender] = useState("");
 
   const { isLoading, isError, message } = useSelector(
     (state) => state.employees
@@ -34,7 +32,6 @@ const NewEmployee = () => {
     e.preventDefault();
     const Data = {
       fullName,
-      // selectedOptions,
       gender,
       workId,
       department,
@@ -50,14 +47,12 @@ const NewEmployee = () => {
     setFullName("");
     setWorkId("");
     setDepartment("");
-    // setSelectedOptions("");
     setGender("");
     setEmail("");
     setPhone("");
     setAddress("");
     setZipCode("");
     setCounty("");
-    console.log(Data);
   };
 
   return (
@@ -95,8 +90,6 @@ const NewEmployee = () => {
                     setFullName={setFullName}
                     workId={workId}
                     setWorkId={setWorkId}
-                    // selectedOptions={selectedOptions}
-                    // setSelectedOptions={setSelectedOptions}
                     gender={gender}
                     setGender={setGender}
                     department={department}

@@ -11,8 +11,6 @@ const InputForm = ({
   setFullName,
   workId,
   setWorkId,
-  // selectedOptions,
-  // setSelectedOptions,
   department,
   setDepartment,
   email,
@@ -53,19 +51,6 @@ const InputForm = ({
             onChange={(choice) => setGender(choice.value)}
           />
         </div>
-
-        {/* <div className="md:col-span-2">
-          <label htmlFor="full_name">Gender</label>
-          <input
-            type="text"
-            name="work_id"
-            id="work_id"
-            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-            required
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-          />
-        </div> */}
 
         <div className="md:col-span-3">
           <label htmlFor="full_name">Work Id</label>
