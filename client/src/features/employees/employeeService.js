@@ -2,6 +2,17 @@ import axios from "axios";
 
 const API_URL = "/api/employees/";
 
+// Register Employee
+const register = async (employeeData) => {
+  const response = await axios.post(API_URL, employeeData);
+
+  if (response.data) {
+    localStorage.setItem("employee", JSON.stringify(response.data));
+  }
+
+  return response.data;
+};
+
 // Get all Employee Records
 const getEmployees = async (token) => {
   const config = {
@@ -15,8 +26,6 @@ const getEmployees = async (token) => {
   return response.data;
 };
 
-const employeeService = {
-  getEmployees,
-};
+const employeeService = { register, getEmployees };
 
 export default employeeService;

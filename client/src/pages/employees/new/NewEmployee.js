@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { register, reset } from "../../../features/employees/employeeSlice";
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
 import InputForm from "../../../constants/InputForm";
+import Message from "../../../components/Message";
+import Loader from "../../../components/Loader";
 
 const NewEmployee = () => {
+  const dispatch = useDispatch();
+
   const [selectedOptions, setSelectedOptions] = useState("");
   const [fullName, setFullName] = useState("");
   const [workId, setWorkId] = useState("");
@@ -14,11 +20,22 @@ const NewEmployee = () => {
   const [zipCode, setZipCode] = useState("");
   const [county, setCounty] = useState("");
 
+  const [gender, setGender] = useState("");
+
+  const { isLoading, isError, message } = useSelector(
+    (state) => state.employees
+  );
+
+  useEffect(() => {
+    dispatch(reset());
+  }, [dispatch]);
+
   const onSubmit = (e) => {
     e.preventDefault();
     const Data = {
       fullName,
-      selectedOptions,
+      // selectedOptions,
+      gender,
       workId,
       department,
       email,
@@ -27,10 +44,14 @@ const NewEmployee = () => {
       zipCode,
       county,
     };
+
+    dispatch(register(Data));
+
     setFullName("");
     setWorkId("");
     setDepartment("");
-    setSelectedOptions("");
+    // setSelectedOptions("");
+    setGender("");
     setEmail("");
     setPhone("");
     setAddress("");
@@ -51,6 +72,11 @@ const NewEmployee = () => {
               Employee Detail Form
             </h2>
 
+            <div className="flex items-center justify-center space-x-5 mt-10 mb-10">
+              {isError && <Message severity="error">{message}</Message>}
+              {isLoading && <Loader />}
+            </div>
+
             <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
               <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                 <div className="text-gray-600 text-center">
@@ -69,8 +95,10 @@ const NewEmployee = () => {
                     setFullName={setFullName}
                     workId={workId}
                     setWorkId={setWorkId}
-                    selectedOptions={selectedOptions}
-                    setSelectedOptions={setSelectedOptions}
+                    // selectedOptions={selectedOptions}
+                    // setSelectedOptions={setSelectedOptions}
+                    gender={gender}
+                    setGender={setGender}
                     department={department}
                     setDepartment={setDepartment}
                     email={email}

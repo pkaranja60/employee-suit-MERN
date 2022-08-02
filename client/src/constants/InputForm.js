@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 
-const gender = [
+const sex = [
   { value: "male", label: "Male" },
   { value: "female", label: "Female" },
 ];
@@ -11,8 +11,8 @@ const InputForm = ({
   setFullName,
   workId,
   setWorkId,
-  selectedOptions,
-  setSelectedOptions,
+  // selectedOptions,
+  // setSelectedOptions,
   department,
   setDepartment,
   email,
@@ -26,6 +26,8 @@ const InputForm = ({
   county,
   setCounty,
   onSubmit,
+  gender,
+  setGender,
 }) => {
   return (
     <form action="" methods="POST" className="mt-6" onSubmit={onSubmit}>
@@ -42,18 +44,28 @@ const InputForm = ({
             onChange={(e) => setFullName(e.target.value)}
           />
         </div>
+
         <div className="md:col-span-2">
           <label htmlFor="full_name">Gender</label>
           <Select
-            options={gender}
-            defaultValue={selectedOptions ? selectedOptions : ""}
-            onChange={(choice) => setSelectedOptions(choice.value)}
+            options={sex}
+            defaultValue={gender ? gender : ""}
+            onChange={(choice) => setGender(choice.value)}
           />
-          {/* <InputSelect
-            defaultValue={selectedOptions}
-            onChange={setSelectedOptions}
-          /> */}
         </div>
+
+        {/* <div className="md:col-span-2">
+          <label htmlFor="full_name">Gender</label>
+          <input
+            type="text"
+            name="work_id"
+            id="work_id"
+            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+            required
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+          />
+        </div> */}
 
         <div className="md:col-span-3">
           <label htmlFor="full_name">Work Id</label>
@@ -98,13 +110,15 @@ const InputForm = ({
         <div className="md:col-span-2">
           <label htmlFor="email">Phone Number</label>
           <input
-            type="number"
+            type="text"
             name="mobile"
             id="email"
             className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
             placeholder="+2547....."
             required
             value={phone}
+            min="10"
+            max="10"
             onChange={(e) => setPhone(e.target.value)}
           />
         </div>

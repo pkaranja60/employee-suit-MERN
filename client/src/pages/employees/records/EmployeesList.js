@@ -16,7 +16,6 @@ import Message from "../../../components/Message";
 import axios from "axios";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 250 },
   { field: "fullName", headerName: "Full Name", width: 260 },
   { field: "gender", headerName: "Gender", width: 100 },
   { field: "workId", headerName: "Work Id", width: 250 },
@@ -73,7 +72,7 @@ const EmployeesList = () => {
         <Navbar />
         <div className="flex h-screen justify-center bg-indigo-50 px-4 space-x-9">
           <div className="w-[90%]">
-            <h2 className="font-semibold text-3xl text-gray-600 mt-6 text-left">
+            <h2 className="font-semibold text-3xl text-gray-600 mt-6 mb-6 text-left">
               Employee Records
             </h2>
             {/* <div className="flex items-center justify-center mt-10 mb-10">
