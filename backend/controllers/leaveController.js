@@ -27,12 +27,27 @@ const applyForLeave = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc all Employee records
-// @route GET/api/goals
+// @desc all leave records
+// @route GET/api/leave
 // @access private
 const getLeaveRequests = asyncHandler(async (req, res) => {
   const requests = await Leave.find({}).populate("employee");
   res.status(200).json(requests);
 });
 
-module.exports = { applyForLeave, getLeaveRequests };
+// @desc leave record details
+// @route GET/api/leaveDetails
+// @access private
+const getLeaveRequestDetails = asyncHandler(async (req, res) => {
+  try {
+    const requestDetails = await Leave.findById(req.params.id).populate(
+      "employee"
+    );
+    res.status(200).json(requestDetails);
+  } catch (error) {
+    res.status(400);
+    throw new Error("No leave found with such id");
+  }
+});
+
+module.exports = { applyForLeave, getLeaveRequests, getLeaveRequestDetails };

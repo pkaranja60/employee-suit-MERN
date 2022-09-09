@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import Message from "../../components/Message";
 import Loader from "../../components/Loader";
+import {
+  fetchLeaveRequestDetails,
+  reset,
+} from "../../features/leave/leaveSlices";
 
 const LeaveScreen = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  const details = useSelector((state) => state?.leave);
+  const { leaveDetails, isLoading, isError, message } = details;
+
+  useEffect(() => {
+    dispatch(fetchLeaveRequestDetails(id));
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, id]);
+
   return (
     <div className="flex flex-row h-screen overflow-hidden items-center justify-center">
       <Sidebar />
@@ -29,26 +49,45 @@ const LeaveScreen = () => {
                   />
 
                   <div className="flex flex-col space-y-3">
-                    <span className="text-lg font-semibold">Applicant</span>
-                    <span className="text-md font-semibold">Department</span>
-                    <span className="text-md font-semibold">Email</span>
-                    <span className="text-md font-semibold">Mobile</span>
+                    <span className="text-lg font-semibold">
+                      {leaveDetails.employee && leaveDetails.employee.fullName}
+                    </span>
+                    <span className="text-md font-semibold">
+                      {leaveDetails.employee &&
+                        leaveDetails.employee.department}
+                    </span>
+                    <span className="text-md font-semibold">
+                      {leaveDetails.employee && leaveDetails.employee.email}
+                    </span>
+                    <span className="text-md font-semibold">
+                      {leaveDetails.employee && leaveDetails.employee.phone}
+                    </span>
                   </div>
                 </div>
 
                 <div className="lg:col-span-2  mx-auto ">
-                  <div className="text-xl font-semibold">
-                    {/* {leaveRequest.status} */}
+                  <div className="text-xl font-semibold text-center text-capitalize">
+                    {leaveDetails.status}
                   </div>
 
                   <div className="flex justify-evenly">
-                    <span className="text-lg m-5">Start Date : </span>
-                    <span className="text-lg m-5 ml-20">End Date :</span>
+                    <span className="text-lg m-5">
+                      Start Date :{" "}
+                      {new Date(leaveDetails.startDate).toLocaleString("en-UK")}
+                    </span>
+                    <span className="text-lg m-5 ml-20">
+                      End Date :{" "}
+                      {new Date(leaveDetails.endDate).toLocaleString("en-UK")}
+                    </span>
                   </div>
 
                   <div className="flex flex-col m">
-                    <span className="text-lg m-5 mt-10">Type of Leave :</span>
-                    <span className="text-lg m-5 mt-10">Description : </span>
+                    <span className="text-lg m-5 mt-10">
+                      Type of Leave : {leaveDetails.leaveType}
+                    </span>
+                    <span className="text-lg m-5 mt-10">
+                      Description : {leaveDetails.description}
+                    </span>
                   </div>
 
                   <div className="flex justify-evenly items-center mt-20">

@@ -116,7 +116,7 @@ const LeaveList = () => {
 
                             <td className="p-2 whitespace-nowrap">
                               <div className="text-lg text-center mr-3">
-                                <Link to={`/leave/${leave.id}`}>
+                                <Link to={`/leave+details/${leave._id}`}>
                                   <button className="bg-gray-500 hover:bg-indigo-500 focus:bg-indigo-500 text-white  rounded-sm px-4 py-2">
                                     Details
                                   </button>
