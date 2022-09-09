@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { login, reset } from "../../features/auth/authSlice";
+import { loginUser, reset } from "../../features/auth/authSlices";
+
 import Login1 from "../../assets/images/login/login.svg";
 
 const Login = () => {
@@ -17,17 +19,18 @@ const Login = () => {
 
   const { email, password } = formData;
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  //select state from store
+  const { login, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
   );
 
   useEffect(() => {
-    if (isSuccess || user) {
+    if (isSuccess || login) {
       navigate("/");
     }
 
     dispatch(reset());
-  }, [user, isSuccess, navigate, dispatch]);
+  }, [navigate, dispatch, isSuccess, login]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -39,7 +42,9 @@ const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(login(email, password));
+    const Data = { email, password };
+
+    dispatch(loginUser(Data));
   };
 
   return (

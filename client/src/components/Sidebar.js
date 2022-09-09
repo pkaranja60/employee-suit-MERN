@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import dashboard from "../assets/images/sidebar/icons8-dashboard-layout-48.png";
 import newEmployee from "../assets/images/sidebar/icons8-add-user-male-48.png";
@@ -7,9 +8,19 @@ import employees from "../assets/images/sidebar/icons8-employee-64.png";
 import leaveRequests from "../assets/images/sidebar/icons8-list-48.png";
 import profile from "../assets/images/sidebar/icons8-administrator-male-80.png";
 import settings from "../assets/images/sidebar/icons8-settings-80.png";
-import logout from "../assets/images/sidebar/icons8-logout-48.png";
+import Logout from "../assets/images/sidebar/icons8-logout-48.png";
+import { logout, reset } from "../features/auth/authSlices";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+    navigate("/login");
+  };
+
   return (
     <div>
       <div className="min-h-screen bg-black">
@@ -19,7 +30,7 @@ const Sidebar = () => {
               <div className="w-max p-2.5">
                 <img
                   src="https://tailus.io/images/logo.svg"
-                  className="w-32"
+                  className="w-32 items-center"
                   alt=""
                 />
               </div>
@@ -101,13 +112,13 @@ const Sidebar = () => {
               </ul>
             </div>
             <div className="w-max -mb-3">
-              <Link
-                to="/"
+              <button
+                onClick={onLogout}
                 className="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-700"
               >
-                <img src={logout} alt="Logo" width="25" height="25" />
+                <img src={Logout} alt="Logo" width="25" height="25" />
                 <span className="group-hover:text-gray-700">Logout</span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

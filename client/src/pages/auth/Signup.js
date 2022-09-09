@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { register, reset } from "../../features/auth/authSlice";
+
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
+import { registerUser, reset } from "../../features/auth/authSlices";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -20,17 +21,18 @@ const Signup = () => {
 
   const [messages, setMessages] = useState();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  //select state from store
+  const { registered, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
   );
 
   useEffect(() => {
-    if (isSuccess || user) {
+    if (isSuccess || registered) {
       navigate("/login");
     }
 
     dispatch(reset());
-  }, [user, isSuccess, navigate, dispatch]);
+  }, [navigate, dispatch, isSuccess, registered]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -45,7 +47,9 @@ const Signup = () => {
     if (password !== password2) {
       setMessages("Passwords do not match");
     } else {
-      dispatch(register(name, email, password));
+      const Data = { name, email, password };
+
+      dispatch(registerUser(Data));
     }
   };
 

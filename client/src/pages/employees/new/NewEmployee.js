@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { register, reset } from "../../../features/employees/employeeSlice";
+
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
 import InputForm from "../../../constants/InputForm";
 import Message from "../../../components/Message";
 import Loader from "../../../components/Loader";
+import {
+  createEmployee,
+  reset,
+} from "../../../features/employees/employeeSlices";
 
 const NewEmployee = () => {
   const dispatch = useDispatch();
@@ -20,8 +24,9 @@ const NewEmployee = () => {
   const [zipCode, setZipCode] = useState("");
   const [county, setCounty] = useState("");
 
+  //select state from store
   const { isLoading, isError, message } = useSelector(
-    (state) => state.employees
+    (state) => state.employee
   );
 
   useEffect(() => {
@@ -42,7 +47,7 @@ const NewEmployee = () => {
       county,
     };
 
-    dispatch(register(Data));
+    dispatch(createEmployee(Data));
 
     setFullName("");
     setWorkId("");
@@ -63,7 +68,7 @@ const NewEmployee = () => {
 
         <div className="flex h-screen justify-center bg-indigo-50 px-4 space-x-9">
           <div className="mt-16">
-            <h2 className="font-semibold text-xl text-gray-800 mb-6">
+            <h2 className="font-semibold text-xl text-gray-800 mb-6 text-center">
               Employee Detail Form
             </h2>
 
@@ -72,7 +77,7 @@ const NewEmployee = () => {
               {isLoading && <Loader />}
             </div>
 
-            <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+            <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6 w-[70%] mx-auto">
               <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                 <div className="text-gray-600 text-center">
                   <p className="font-medium text-lg">Personal Details</p>

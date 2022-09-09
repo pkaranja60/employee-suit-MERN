@@ -8,9 +8,12 @@ const {
 } = require("../controllers/employeeController");
 const { auth, protect } = require("../middleware/authMiddleware");
 
-router.post("/", registerEmployee);
+//Admin
+router.post("/create", protect, registerEmployee);
+router.get("/employees", protect, getEmployees);
+
+//mobile
 router.post("/login", loginEmployee);
-router.get("/employees", getEmployees);
 router.get("/profile", auth, getProfile);
 
 module.exports = router;

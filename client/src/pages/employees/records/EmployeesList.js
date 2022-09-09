@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   DataGrid,
@@ -8,12 +8,15 @@ import {
   GridToolbarExport,
   GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
+
 import Navbar from "../../../components/Navbar";
 import Sidebar from "../../../components/Sidebar";
-import { getEmployees, reset } from "../../../features/employees/employeeSlice";
 import Loader from "../../../components/Loader";
 import Message from "../../../components/Message";
-import axios from "axios";
+import {
+  fetchEmployees,
+  reset,
+} from "../../../features/employees/employeeSlices";
 
 const columns = [
   { field: "fullName", headerName: "Full Name", width: 260 },
@@ -36,34 +39,19 @@ function CustomToolbar() {
   );
 }
 
-const API_URL = "/api/employees/employees";
-
 const EmployeesList = () => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const { employees, isLoading, isError, message } = useSelector(
-  //   (state) => state.employees
-  // );
-
-  // useEffect(() => {
-  //   dispatch(getEmployees());
-
-  //   return () => {
-  //     dispatch(reset());
-  //   };
-  // }, [dispatch]);
-
-  const [tableData, setTableData] = useState([]);
-
-  const getEmployeeData = async () => {
-    const response = await axios.get(API_URL);
-    setTableData(response.data);
-    console.log(response.data);
-  };
+  const employee = useSelector((state) => state?.employee);
+  const { employeeList, isLoading, isError, message } = employee;
 
   useEffect(() => {
-    getEmployeeData();
-  }, []);
+    dispatch(fetchEmployees());
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
 
   return (
     <div className="flex flex-row h-screen overflow-hidden items-center justify-center">
@@ -75,15 +63,15 @@ const EmployeesList = () => {
             <h2 className="font-semibold text-3xl text-gray-600 mt-6 mb-6 text-left">
               Employee Records
             </h2>
-            {/* <div className="flex items-center justify-center mt-10 mb-10">
+            <div className="flex items-center justify-center mt-10 mb-10">
               {isError && <Message severity="error">{message}</Message>}
               {isLoading && <Loader />}
-            </div> */}
+            </div>
 
             <div className="mx-auto" style={{ height: 700, width: "90%" }}>
               <DataGrid
                 getRowId={(r) => r._id}
-                rows={tableData}
+                rows={employeeList || []}
                 columns={columns}
                 components={{
                   Toolbar: CustomToolbar,

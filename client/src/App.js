@@ -19,7 +19,7 @@ function App() {
         <Route path="/employee+records" element={<EmployeeList />} />
         <Route path="/newemployee" element={<NewEmployee />} />
         <Route path="/leave+list" element={<LeaveList />} />
-        <Route path="/leave/:id" element={<LeaveScreen />} />
+        <Route path="/leave+details/:id" element={<LeaveScreen />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
 

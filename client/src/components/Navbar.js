@@ -1,6 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const { userLogin } = useSelector((state) => state.auth);
+
   return (
     <>
       {/* <!-- component --> */}
@@ -10,7 +13,7 @@ const Navbar = () => {
           //   className="pt-3 md:pt-2 pb-2 px-2 mt-0 h-auto fixed w-full z-20 top-0"
         >
           {/* <!-- logo --> */}
-          <div className="mr-auto md:w-48 flex-shrink-0">
+          <div className="mr-auto md:w-48 flex-shrink-0 p-1.9">
             <img
               src="https://tailus.io/images/logo.svg"
               className="w-32"
@@ -20,7 +23,9 @@ const Navbar = () => {
 
           {/* <!-- username --> */}
           <div className="ml-4 hidden sm:flex flex-col font-bold">
-            <span>$2,650,59</span>
+            <span className="text-lg text-transform: capitalize">
+              {userLogin && userLogin.name}
+            </span>
           </div>
         </div>
 

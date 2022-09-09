@@ -6,6 +6,16 @@ const sex = [
   { value: "female", label: "Female" },
 ];
 
+const departments = [
+  { value: "sales", label: "Sales" },
+  { value: "finance", label: "Finance" },
+  { value: "customer care", label: "Customer Care" },
+  { value: "marketing", label: "Marketing" },
+  { value: "hr", label: "Human Resource" },
+  { value: "legal", label: "Legal" },
+  { value: "ict", label: "ICT" },
+];
+
 const InputForm = ({
   fullName,
   setFullName,
@@ -28,7 +38,12 @@ const InputForm = ({
   setGender,
 }) => {
   return (
-    <form action="" methods="POST" className="mt-6" onSubmit={onSubmit}>
+    <form
+      action=""
+      methods="POST"
+      className="mt-6 justify-center items-center"
+      onSubmit={onSubmit}
+    >
       <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
         <div className="md:col-span-3">
           <label htmlFor="full_name">Full Name</label>
@@ -52,7 +67,7 @@ const InputForm = ({
           />
         </div>
 
-        <div className="md:col-span-3">
+        <div className="md:col-span-2">
           <label htmlFor="full_name">Work Id</label>
           <input
             type="text"
@@ -65,16 +80,12 @@ const InputForm = ({
           />
         </div>
 
-        <div className="md:col-span-2">
-          <label htmlFor="full_name">Department</label>
-          <input
-            type="text"
-            name="department"
-            id="department"
-            className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-            required
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
+        <div className="md:col-span-3">
+          <label htmlFor="full_name">Departments</label>
+          <Select
+            options={departments}
+            defaultValue={department ? department : ""}
+            onChange={(choice) => setDepartment(choice.value)}
           />
         </div>
 
@@ -102,8 +113,8 @@ const InputForm = ({
             placeholder="+2547....."
             required
             value={phone}
-            min="10"
-            max="10"
+            minLength={10}
+            maxLength={10}
             onChange={(e) => setPhone(e.target.value)}
           />
         </div>
