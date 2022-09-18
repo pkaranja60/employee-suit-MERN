@@ -88,12 +88,14 @@ const registerEmployee = asyncHandler(async (req, res, next) => {
 const loginEmployee = asyncHandler(async (req, res) => {
   const { workId } = req.body;
 
+  console.log("hit endpoint");
   // Check if user workId exists
   const employee = await Employee.findOne({ workId });
 
   if (employee) {
     res.json({
       _id: employee.id,
+      name: employee.fullName,
       //   workId: employee.workId,
       token: generateToken(employee._id),
     });
@@ -101,7 +103,6 @@ const loginEmployee = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid user credentials");
   }
-  res.json({ message: "Login Employee" });
 });
 
 // @desc Get employee Data

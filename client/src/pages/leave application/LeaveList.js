@@ -1,25 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { fetchLeaveRequests, reset } from "../../features/leave/leaveSlices";
+import {
+  fetchLeaveRequests,
+  fetchLeaveRequestsByFilter,
+  reset,
+} from "../../features/leave/leaveSlices";
 
 const LeaveList = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const [text, setText] = useState("");
+
+  const auth = useSelector((state) => state?.auth);
+  const { userLogin } = auth;
 
   const leave = useSelector((state) => state?.leave);
   const { leaveList, isLoading, isError, message } = leave;
 
   useEffect(() => {
+    if (!userLogin) {
+      navigate("/login");
+    }
+
     dispatch(fetchLeaveRequests());
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]);
+  }, [dispatch, navigate, userLogin]);
+
+  const handleSearch = (e) => {
+    setText(e.target.value);
+
+    dispatch(
+      fetchLeaveRequestsByFilter({ type: "text", query: e.target.value })
+    );
+  };
   return (
     <div className="flex flex-row h-screen overflow-hidden items-center">
       <Sidebar />
@@ -28,6 +50,21 @@ const LeaveList = () => {
         <Navbar />
 
         <section className="w-full bg-indigo-50 text-gray-600 h-screen">
+          <form>
+            <div>
+              <input
+                type="text"
+                name="search"
+                id="search"
+                placeholder="search"
+                className="ml-16 mt-10 mb-5 w-[88%] px-4 py-3 rounded-lg bg-gray-50 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                required
+                value={text}
+                onChange={handleSearch}
+              />
+            </div>
+          </form>
+
           <div className="flex flex-col items-center h-full">
             {/* <!-- Table --> */}
             {isLoading ? (
@@ -35,7 +72,7 @@ const LeaveList = () => {
             ) : isError ? (
               <Message severity="error">{message}</Message>
             ) : (
-              <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-16 text-center">
+              <div className="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-sm border border-gray-200 mt-5 text-center">
                 <header className="px-5 py-4 border-b border-gray-100">
                   <h2 className="font-semibold text-gray-800">
                     Leave Requests
@@ -44,30 +81,38 @@ const LeaveList = () => {
                 <div className="p-3">
                   <div className="overflow-x-auto">
                     <table className="table-auto w-full">
-                      <thead className="text-xs font-medium uppercase text-gray-600 bg-gray-50 ">
+                      <thead className="text-xs text-center font-medium uppercase text-gray-600 bg-gray-50 ">
                         <tr>
                           <th className="p-2 whitespace-nowrap">
                             <div className="font-semibold text-left ">#</div>
                           </th>
+
                           <th className="p-2 whitespace-nowrap ">
                             <div className="font-semibold text-left mr-3">
                               Employee Name
                             </div>
                           </th>
+
                           <th className="p-2 whitespace-nowrap">
                             <div className="font-semibold text-left mr-3">
                               Department
                             </div>
                           </th>
+
                           <th className="p-2 whitespace-nowrap">
                             <div className="font-semibold text-left mr-3">
                               Date Applied
                             </div>
                           </th>
+
                           <th className="p-2 whitespace-nowrap">
                             <div className="font-semibold text-left mr-3">
                               Leave Status
                             </div>
+                          </th>
+
+                          <th className="p-2 whitespace-nowrap">
+                            <div className="font-semibold text-left mr-3"></div>
                           </th>
                         </tr>
                       </thead>
@@ -109,9 +154,19 @@ const LeaveList = () => {
                             </td>
 
                             <td className="p-2 whitespace-nowrap">
-                              <div className="text-left font-medium text-green-500 mr-3">
-                                {leave.status}
-                              </div>
+                              {leave.isApproved ? (
+                                <div className="text-lg text-green-500 text-center font-medium">
+                                  {leave.status}
+                                </div>
+                              ) : leave.isRejected ? (
+                                <div className="text-lg text-red-500 text-center font-medium">
+                                  {leave.status}
+                                </div>
+                              ) : (
+                                <div className="text-lg text-grey-400 text-center font-medium">
+                                  {leave.status}
+                                </div>
+                              )}
                             </td>
 
                             <td className="p-2 whitespace-nowrap">

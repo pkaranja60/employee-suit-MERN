@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   DataGrid,
@@ -40,18 +41,26 @@ function CustomToolbar() {
 }
 
 const EmployeesList = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const auth = useSelector((state) => state?.auth);
+  const { userLogin } = auth;
 
   const employee = useSelector((state) => state?.employee);
   const { employeeList, isLoading, isError, message } = employee;
 
   useEffect(() => {
+    if (!userLogin) {
+      navigate("/login");
+    }
+
     dispatch(fetchEmployees());
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]);
+  }, [dispatch, navigate, userLogin]);
 
   return (
     <div className="flex flex-row h-screen overflow-hidden items-center justify-center">

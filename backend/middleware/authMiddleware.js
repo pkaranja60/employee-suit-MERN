@@ -60,34 +60,59 @@ const protect = asyncHandler(async (req, res, next) => {
 });
 
 // mobile
+// const auth = asyncHandler(async (req, res, next) => {
+//   let token;
+
+//   if (
+//     req.headers.authorization &&
+//     req.headers.authorization.startsWith("Bearer")
+//   ) {
+//     try {
+//       // Get token from header
+//       token = req.headers.authorization.split(" ")[1];
+
+//       // Verify token
+//       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+//       // Get user from the token
+//       req.employee = await Employee.findById(decoded.id).select("-workId");
+
+//       next();
+//     } catch (error) {
+//       console.log(error);
+//       res.status(401);
+//       throw new Error("Not authorized");
+//     }
+//   }
+
+//   if (!token) {
+//     res.status(401);
+//     throw new Error("Not authorized, no token");
+//   }
+// });
+
 const auth = asyncHandler(async (req, res, next) => {
-  let token;
+  // verify authentication
+  const { authorization } = req.headers;
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      // Get token from header
-      token = req.headers.authorization.split(" ")[1];
-
-      // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Get user from the token
-      req.employee = await Employee.findById(decoded.id).select("-workId");
-
-      next();
-    } catch (error) {
-      console.log(error);
-      res.status(401);
-      throw new Error("Not authorized");
-    }
-  }
-
-  if (!token) {
+  if (!authorization) {
     res.status(401);
-    throw new Error("Not authorized, no token");
+    throw new Error("Not authorized, No authorization found");
+  }
+  // Get token from header
+  const token = authorization.split(" ")[1];
+  try {
+    // Verify token
+    const { _id } = jwt.verify(token, process.env.JWT_SECRET);
+
+    //Get user from token
+    req.user = await User.findOne({ _id }).select("-workId");
+
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(401);
+    throw new Error("Not authorized, invalid token passed");
   }
 });
 

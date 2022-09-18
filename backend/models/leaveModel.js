@@ -42,4 +42,5 @@ const leaveSchema = new Schema(
   }
 );
 
+leaveSchema.index({ status: "text" });
 module.exports = mongoose.model("Leave", leaveSchema);

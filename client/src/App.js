@@ -15,6 +15,7 @@ function App() {
     <div className="flex flex-col">
       <Routes>
         {/* Protected Routes */}
+
         <Route path="/" element={<Home />} />
         <Route path="/employee+records" element={<EmployeeList />} />
         <Route path="/newemployee" element={<NewEmployee />} />

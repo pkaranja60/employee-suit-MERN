@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Navbar from "../../../components/Navbar";
@@ -12,6 +13,7 @@ import {
 } from "../../../features/employees/employeeSlices";
 
 const NewEmployee = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [fullName, setFullName] = useState("");
@@ -25,13 +27,20 @@ const NewEmployee = () => {
   const [county, setCounty] = useState("");
 
   //select state from store
+  const auth = useSelector((state) => state?.auth);
+  const { userLogin } = auth;
+
   const { isLoading, isError, message } = useSelector(
     (state) => state.employee
   );
 
   useEffect(() => {
+    if (!userLogin) {
+      navigate("/login");
+    }
+
     dispatch(reset());
-  }, [dispatch]);
+  }, [dispatch, navigate, userLogin]);
 
   const onSubmit = (e) => {
     e.preventDefault();

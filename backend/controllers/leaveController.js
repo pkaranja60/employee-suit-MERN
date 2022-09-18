@@ -50,4 +50,75 @@ const getLeaveRequestDetails = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { applyForLeave, getLeaveRequests, getLeaveRequestDetails };
+// @desc approve leave application
+// @route PUT/api/leaveDetails
+// @access private
+const approveLeave = asyncHandler(async (req, res) => {
+  try {
+    const approve = await Leave.findByIdAndUpdate(
+      req.params.id,
+      {
+        status: "approved",
+        isApproved: true,
+        isRejected: false,
+      },
+      { new: true }
+    );
+    res.status(200).json(approve);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
+// @desc reject leave application
+// @route PUT/api/leaveDetails
+// @access private
+const rejectLeave = asyncHandler(async (req, res) => {
+  try {
+    const reject = await Leave.findByIdAndUpdate(
+      req.params.id,
+      {
+        status: "rejected",
+        isApproved: false,
+        isRejected: true,
+      },
+      { new: true }
+    );
+    res.status(200).json(reject);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
+// @desc filter leave by status
+// @route PUT/api/leaveDetails
+// @access private
+const filterByStatus = asyncHandler(async (req, res) => {
+  const { type, query } = req.body;
+  try {
+    let status;
+
+    switch (type) {
+      case "text":
+        status = await Leave.find({ $text: { $search: query } });
+        break;
+    }
+
+    if (!status.length > 0) {
+      status = await Leave.find({});
+    }
+
+    res.status(200).json({ status });
+  } catch (error) {
+    res.status(400).json(error);
+  }
+});
+
+module.exports = {
+  applyForLeave,
+  getLeaveRequests,
+  getLeaveRequestDetails,
+  approveLeave,
+  rejectLeave,
+  filterByStatus,
+};

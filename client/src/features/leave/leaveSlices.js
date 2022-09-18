@@ -77,6 +77,109 @@ export const fetchLeaveRequestDetails = createAsyncThunk(
   }
 );
 
+// Fetch Approve Leave Request
+export const approveLeaveAction = createAsyncThunk(
+  "leave/approve",
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      //get user token
+
+      const user = getState()?.auth;
+      const { userLogin } = user;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userLogin?.token}`,
+        },
+      };
+
+      //http call
+      const response = await axios.put(
+        API_URL + `fetchLeaveDetails/approve/${id}`,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return rejectWithValue(message);
+    }
+  }
+);
+
+// Fetch Reject Leave Request
+export const rejectLeaveAction = createAsyncThunk(
+  "leave/reject",
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      //get user token
+
+      const user = getState()?.auth;
+      const { userLogin } = user;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userLogin?.token}`,
+        },
+      };
+
+      //http call
+      const response = await axios.put(
+        API_URL + `fetchLeaveDetails/reject/${id}`,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return rejectWithValue(message);
+    }
+  }
+);
+
+//filter status
+export const fetchLeaveRequestsByFilter = createAsyncThunk(
+  "leave/filter",
+  async (filterData, { rejectWithValue, getState, dispatch }) => {
+    try {
+      //get user token
+
+      const user = getState()?.auth;
+      const { userLogin } = user;
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userLogin?.token}`,
+        },
+      };
+
+      //http call
+      const response = await axios.post(
+        API_URL + "status/filter",
+        filterData,
+        config
+      );
+      return response.data;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return rejectWithValue(message);
+    }
+  }
+);
+
 //slices
 export const leaveSlices = createSlice({
   name: "leave",
@@ -119,6 +222,51 @@ export const leaveSlices = createSlice({
       state.isError = true;
       state.message = action?.payload;
       state.leaveDetails = null;
+    });
+    // approve
+    builder.addCase(approveLeaveAction.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(approveLeaveAction.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.approve = action?.payload;
+    });
+    builder.addCase(approveLeaveAction.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action?.payload;
+      state.approve = null;
+    });
+    // reject
+    builder.addCase(rejectLeaveAction.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(rejectLeaveAction.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.reject = action?.payload;
+    });
+    builder.addCase(rejectLeaveAction.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action?.payload;
+      state.reject = null;
+    });
+    // filter
+    builder.addCase(fetchLeaveRequestsByFilter.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchLeaveRequestsByFilter.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.filter = action?.payload;
+    });
+    builder.addCase(fetchLeaveRequestsByFilter.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = action?.payload;
+      state.filter = null;
     });
   },
 });
